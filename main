@@ -1,0 +1,111 @@
+#include <string>
+#include <iostream>
+using namespace std;
+
+string getWord();
+char receiveGuess();
+char lowercase(char x);
+string guessedWord();
+
+main()
+{
+	string guessed="";
+	int strike=0;
+	string xx = getWord();
+	string letterguesses="";
+	int leng;
+	bool flagstrike, flag2= false, flagnotletter = false, guessedletteralready = false;
+	
+	
+	
+	char guess;
+	leng = xx.length();
+	while(xx != "0")
+	{
+		for(int i=0;i<leng; i++ )
+		{
+			xx[i] = lowercase(xx[i]);
+			if(xx[i]>=97 && xx[i]<=122)
+				guessed +="+";
+			else
+				guessed+= xx[i];
+		}
+		cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+		cout<<"Guess word: "<<guessed<<endl;
+		while(strike <6 && !flag2)
+		{
+			guess =  receiveGuess();
+			guess = lowercase(guess);
+			if(letterguesses.find(guess, 0)<letterguesses.length())
+			{
+				cout<<"You have already guessed that letter! Guess Again "<<endl;
+				guessedletteralready=true;	
+			}
+			else
+				letterguesses+=guess;
+				
+			if(!guessedletteralready &&(guess<97|| guess >122))
+			{
+					cout<<"That is not a letter! Please only type in letters"<<endl;
+					flagnotletter=true;
+			}
+			flagstrike =true;
+			for(int i=0; i<leng&& !flagnotletter && !guessedletteralready;i++)
+			{
+				if(xx[i]==guess)
+				{
+					guessed[i]= xx[i];
+					flagstrike = false;
+				}
+	
+			}
+			if(guessed.find("+", 0)>=leng)
+				flag2 = true;
+				
+			if(flagstrike == true && !flagnotletter && !guessedletteralready)
+				strike++;
+			if(strike==6)
+				cout<<"You have 6 strikes. You lose "<<endl;
+			if(flag2 ==true)
+				cout<<"You have guessed the word!! It was "<<guessed<<endl;
+			else
+				cout<<"The word: "<<guessed<<endl<<" And you have "<<strike<<" strikes "<<endl;
+			guessedletteralready=false;
+			flagnotletter = false;
+		}
+		strike= 0;
+		guessed="";
+		xx=getWord();
+		leng = xx.length();
+		flag2 = false;
+		letterguesses="";
+		
+		
+		
+	}
+}
+int checkStrike(){
+	
+}
+
+string getWord()
+{
+	cout<<"input word you want other player to guess, followed by enter or enter 0 to quit"<<endl;
+	string x;
+	cin>>x;
+	return x;
+}
+char receiveGuess()
+{
+	char letter;
+	cout<<"guess a letter"<<endl;
+	cin>>letter;
+
+	return letter;
+}
+char lowercase(char x)
+{
+	if(x>=65 && x<=90)
+		x= x+32;	
+	return x;
+}
